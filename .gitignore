@@ -1,0 +1,85 @@
+# ========================
+# Python
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# Virtual Environment
+venv/
+.env/
+env/
+.venv/
+
+# ========================
+# Environment / Secrets
+# ========================
+# Do NOT commit any secrets
+.env
+*.env
+*.key
+*.pem
+*.crt
+*.token
+
+# ========================
+# IDE / Editor Files
+# ========================
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+
+# ========================
+# Logs & Dumps
+# ========================
+*.log
+*.out
+*.err
+*.pid
+
+# ========================
+# OS-specific files
+# ========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========================
+# Build / Distribution
+# ========================
+dist/
+build/
+*/__pycache__
+*.egg-info/
+.eggs/
+
+# ========================
+# Byte-compiled / Cache
+# ========================
+.cache/
+pytest_cache/
+pip-wheel-metadata/
+
+# ========================
+# Jupyter Notebook
+# ========================
+.ipynb_checkpoints/
+
+# ========================
+# Local tooling
+# ========================
+.env.local
+.env.development
+.env.production
