@@ -67,7 +67,7 @@ import pandas as pd
 
 def extracting_questions_and_adding_answer(df):
     # Path to your docx file
-    docs_path = r'E:\Gunjan_Folder\Exit_Interview_Analysis\src\docx_processing\Employee Exit Interview Feedback Form.docx'
+    docs_path = r'G:\Netsmartz\Netsmartz\leaving office form\Exit-Interview-Analysis\src\docx_processing\Employee Exit Interview Feedback Form.docx'
 
     # Load the .docx file
     doc_data = docx2python(docs_path)

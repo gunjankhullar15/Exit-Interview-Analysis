@@ -52,7 +52,16 @@ For each subjective question, provide the following details:
 Additionally, provide:
 
 - overall_sentiment (percentage of positive, neutral, negative answers)
-- overall_summary (a detailed professional summary of all subjective responses)
+- overall_summary (a detailed professional summary of all subjective responses which have strictly 300 to 400 words)
+
+Subjective sentiments:
+These sentiments are only for subjective questions:
+
+- Positive Sentiments 
+- Neutral Sentiments
+- Negative Sentiments
+
+these all sentiments should be in point format.
 
 ---
 
@@ -92,7 +101,13 @@ The final output must strictly follow valid JSON format and should match the str
       "negative_percentage": 15
     }},
 
-    "overall_summary": "Most subjective responses indicate that the employee had a generally positive experience, particularly appreciating the support from team members. However, some recurring concerns include communication gaps and workload inconsistencies. The responses suggest that improving clarity in task delegation and ensuring better workload balance could enhance employee satisfaction."
+    "overall_summary": "Most subjective responses indicate that the employee had a generally positive experience, particularly appreciating the support from team members. However, some recurring concerns include communication gaps and workload inconsistencies. The responses suggest that improving clarity in task delegation and ensuring better workload balance could enhance employee satisfaction.",
+
+    Sentiment Definitions: {{
+      "positive_sentiments": ["- supportive teammates","- learning opportunities"],
+      "neutral_sentiments": [ "- average workload","- standard communication"],
+      "negative_sentiments": [ "- unfair treatment","- micromanagement","- lack of appreciation","- poor management","- favoritism","- biased decisions"]
+      }}
   }}
 }}
 
