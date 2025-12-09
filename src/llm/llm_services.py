@@ -61,7 +61,7 @@ These sentiments are only for subjective questions:
 - Neutral Sentiments
 - Negative Sentiments
 
-these all sentiments should be in point format.
+these all sentiments should be in point format and only from the given data.
 
 ---
 
