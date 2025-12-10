@@ -125,7 +125,10 @@ async def Generate_llm_response(db: AsyncSession = Depends(get_db)):
                     "hrbp_name": emp.hrbp_name or "N/A",
                     "location": emp.location or "N/A",
                     "joining_date": emp.joining_date or "N/A",
-                    "exit_date": emp.exit_date or "N/A"
+                    "exit_date": emp.exit_date or "N/A",
+                    "resignation_date": emp.date_of_resignation or "N/A",
+                    "department": emp.department or "N/A",
+                    "designation": emp.designation or "N/A"
                 }
 
                 

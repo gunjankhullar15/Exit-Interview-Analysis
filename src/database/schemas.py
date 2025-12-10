@@ -20,6 +20,9 @@ class ReportsOutput(BaseModel):
     exit_date: Optional[str] = "N/A"
     survey_initiated_date: Optional[str] = "N/A"
     survey_submission_date: Optional[str] = "N/A"
+    date_of_resignation: Optional[str] = "N/A"
+    department: Optional[str] = "N/A"
+    designation: Optional[str] = "N/A"
     
     # This comes from the Employee table
     overall_sentiment: Optional[str] = "N/A"

@@ -88,13 +88,13 @@ async def upload_excel(file: UploadFile = File(...), db: AsyncSession = Depends(
                 location=meta['location'],
                 joining_date=meta['joining_date'],
                 exit_date=meta['exit_date'],
-                #date_of_resignation=meta['exit_date'], # Using Exit Date as fallback for resignation date
+                date_of_resignation=meta['exit_date'], # Using Exit Date as fallback for resignation date
                 survey_initiated_date=meta['survey_initiated_date'], 
                 survey_submission_date=meta['survey_submission_date'], 
                 
                 # Defaults
-                #department="N/A", 
-                #designation="N/A"
+                department="BYT", 
+                designation="AIML Engineer"
             )
             db.add(new_emp)
             await db.flush() 
