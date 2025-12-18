@@ -1,72 +1,98 @@
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
+import os
 import json
+from dotenv import load_dotenv
 from src.config.pydantic_config import settings
 
+load_dotenv()
 
-model = ChatGroq(
-        
-        api_key=settings.GROQ_API_KEY,
-        model_name="llama-3.3-70b-versatile",
-        response_format={"type": "json_object"},
-    )
+model = ChatOpenAI(
+    api_key=settings.OPENAI_API_KEY,
+    model="gpt-5.2",
+    temperature=0,
+    model_kwargs={"response_format": {"type": "json_object"}}
+)
 
 def getting_analysis_from_llm(data):
 
     prompt = f"""
 You are an expert HR analyst specializing in evaluating employee exit and feedback forms.
 
-Your task is to analyze the employee’s written feedback, which contains two types of questions:
+Your task is to analyze an employee’s written feedback containing two types of questions:
 1. MCQ-type questions (Total: 17 questions)
 2. Subjective-type questions (Total: 8 questions)
 
-Question Types Details:
-- Subjective questions are: 2, 12, 13, 14, 15, 16, 17, 18
-- All other questions are MCQ-type.
-- The complete set of questions along with the user’s answers is provided in:
+Question Type Details:
+- Subjective question numbers: 2, 12, 13, 14, 15, 16, 17, 18
+- All remaining questions are MCQ-type
+- The complete set of questions and user answers is provided below:
 {data}
 
 ---
 
 MCQ Analysis Requirements:
-Analyze all MCQ-type questions and generate the following fields:
-
+Analyze only MCQ-type questions and generate the following fields:
 - total_questions
 - positive_count
 - positive_percentage
 - negative_count
 - negative_percentage
 
-(You must correctly calculate percentages based on the MCQ responses.)
+Percentages must be accurately calculated based on MCQ responses.
 
 ---
 
-Subjective Questions Analysis Requirements:
-For each subjective question, provide the following details:
-
+Subjective Analysis Requirements:
+For each subjective question, provide:
 - question_number
 - question_text
-- user_answer
-- sentiments (positive, neutral, negative)
-- sentiment_score (0–1 score)
+- answer_text
+- sentiment (positive, neutral, or negative)
+- sentiment_score (float between 0 and 1)
 
-Additionally, provide:
+Additionally, compute:
+- overall_sentiment (percentage distribution of positive, neutral, and negative answers)
+- overall_summary (a professional summary strictly between 100 and 200 words from the subjective questions answers)
 
-- overall_sentiment (percentage of positive, neutral, negative answers)
-- overall_summary (a detailed professional summary of all subjective responses which have strictly 300 to 400 words)
+---
 
-Subjective sentiments:
-These sentiments are only for subjective questions:
-
-- Positive Sentiments 
+Sentiment Definitions (Subjective Only):
+Extract sentiment points strictly from the provided data and return them in bullet-point format:
+- Positive Sentiments
 - Neutral Sentiments
 - Negative Sentiments
 
-these all sentiments should be in point format and only from the given data.
+---
+
+Company Feedback:
+Summarize the negative feedback provided by the employee.
+This should clearly describe areas where the company needs improvement.
+Use concise bullet points.
 
 ---
 
-Output Format (Strictly JSON Only):
-The final output must strictly follow valid JSON format and should match the structure shown below:
+Leaving Reason Classification:
+From the data of subjective type question, identify the primary reason for leaving.
+Assign value 1 to the most relevant reason and 0 to all others.
+Only consider these 8 possible reason and select only form these reason and do not add any other reason.
+
+Possible reasons:
+- career change
+- personal reasons
+- better work-life balance
+- role redundancy
+- dissatisfaction with management
+- seeking higher salary
+- lack of growth opportunities
+- toxic work environment
+
+Only one reason must be marked as 1.
+
+---
+
+STRICT OUTPUT FORMAT (VALID JSON ONLY):
+Do not include explanations, markdown, comments, or additional text.
+Return only valid JSON exactly in the structure below.
 
 {{
   "objective_analysis": {{
@@ -76,47 +102,63 @@ The final output must strictly follow valid JSON format and should match the str
     "negative_count": 6,
     "negative_percentage": 33
   }},
-
   "subjective_analysis": {{
     "question_wise_sentiment": [
       {{
-        "question_number": 19,
-        "question_text": "Describe your experience with the work environment.",
-        "answer_text": "The work environment was supportive...",
+        "question_number": 2,
+        "question_text": "Question text here",
+        "answer_text": "User answer here",
         "sentiment": "positive",
         "sentiment_score": 0.84
-      }},
-      {{
-        "question_number": 20,
-        "question_text": "What challenges did you face?",
-        "answer_text": "Sometimes communication was unclear...",
-        "sentiment": "neutral",
-        "sentiment_score": 0.55
       }}
     ],
-
     "overall_sentiment": {{
       "positive_percentage": 52,
       "neutral_percentage": 33,
       "negative_percentage": 15
     }},
-
-    "overall_summary": "Most subjective responses indicate that the employee had a generally positive experience, particularly appreciating the support from team members. However, some recurring concerns include communication gaps and workload inconsistencies. The responses suggest that improving clarity in task delegation and ensuring better workload balance could enhance employee satisfaction.",
-
-    Sentiment Definitions: {{
-      "positive_sentiments": ["- supportive teammates","- learning opportunities"],
-      "neutral_sentiments": [ "- average workload","- standard communication"],
-      "negative_sentiments": [ "- unfair treatment","- micromanagement","- lack of appreciation","- poor management","- favoritism","- biased decisions"]
-      }}
+    "overall_summary": "300–400 word professional summary here.",
+    "sentiment_definitions": {{
+      "positive_sentiments": [
+        "- supportive teammates",
+        "- learning opportunities"
+      ],
+      "neutral_sentiments": [
+        "- average workload",
+        "- standard communication"
+      ],
+      "negative_sentiments": [
+        "- unfair treatment",
+        "- micromanagement",
+        "- lack of appreciation",
+        "- poor management",
+        "- favoritism",
+        "- biased decisions"
+      ]
+    }},
+    "company_feedback": [
+      "Address unfair treatment by ensuring transparency and fairness in workplace practices.",
+      "Reduce micromanagement by promoting trust and autonomy.",
+      "Improve employee recognition and appreciation.",
+      "Strengthen management practices through leadership training.",
+      "Eliminate favoritism using objective evaluation criteria.",
+      "Ensure unbiased and well-documented decision-making."
+    ],
+    "leaving_reason": {{
+      "career change": 0,
+      "personal reasons": 0,
+      "better work-life balance": 0,
+      "health reasons": 0,
+      "dissatisfaction with management": 0,
+      "seeking higher salary": 0,
+      "lack of growth opportunities": 0,
+      "toxic work environment": 1
+    }}
   }}
 }}
-
----
-
-Important:
-- The output must be valid JSON.
-- Do not include explanations, markdown, or additional text outside JSON.
 """
+
+
     
     response = model.invoke(prompt)
 
