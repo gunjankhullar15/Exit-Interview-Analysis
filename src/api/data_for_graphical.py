@@ -9,8 +9,8 @@ from src.database.models import Employee, AnalysisReport
 router = APIRouter()
 
 
-@router.get("/analysis-reports-by-joining-date/")
-async def get_analysis_reports_by_joining_date(
+@router.get("/graphical_report_data/")
+async def get_graphical_report_data(
     start_date: str = Query(..., example="07 Sep 2015"),
     end_date: str = Query(..., example="26 Oct 2020"),
     db: AsyncSession = Depends(get_db),
@@ -44,11 +44,11 @@ async def get_analysis_reports_by_joining_date(
             continue
 
         try:
-            emp_joining_dt = datetime.strptime(emp.joining_date, "%d %b %Y")
+            emp_resignation_dt = datetime.strptime(emp.date_of_resignation, "%d %b %Y")
         except ValueError:
             continue
 
-        if start_dt <= emp_joining_dt <= end_dt:
+        if start_dt <= emp_resignation_dt <= end_dt:
             filtered_employees.append(emp)
 
     if not filtered_employees:
