@@ -66,6 +66,14 @@ async def download_employee_details_csv(
         neutral = all_data["subjective_analysis"]["sentiment_definitions"]["neutral_sentiments"]
         summary = all_data["subjective_analysis"]["overall_summary"]
 
+        negative = str(negative)
+        positive = str(positive)
+        neutral = str(neutral)
+
+        negative = negative[1:-1]
+        positive = positive[1:-1]
+        neutral = neutral[1:-1]
+
         writer.writerow([
             emp.employee_code,
             emp.name,

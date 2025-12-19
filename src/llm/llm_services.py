@@ -1,5 +1,4 @@
 from langchain_openai import ChatOpenAI
-import os
 import json
 from dotenv import load_dotenv
 from src.config.pydantic_config import settings
