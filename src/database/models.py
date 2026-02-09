@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, JSON, DateTime, func
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON, DateTime, func, Float, UniqueConstraint, Text
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -49,4 +49,59 @@ class AnalysisReport(Base):
 
     full_analysis_json = Column(JSON, nullable=True)
     
+    exit_category = Column(String, index=True) # e.g., "Salary"
+    is_controllable = Column(Boolean, default=True)
+    
     employee = relationship("Employee", back_populates="analysis_report")
+
+
+# class MonthlyReasonStats(Base):
+#     __tablename__ = "monthly_reason_stats"
+#     id = Column(Integer, primary_key=True, index=True)
+#     month = Column(Integer, nullable=False)
+#     year = Column(Integer, nullable=False)
+#     reason_name = Column(String, nullable=False)
+#     percentage = Column(Float, nullable=False)
+#     total_count = Column(Integer, nullable=False) # Number of people for this reason
+#     total_month_exits = Column(Integer, nullable=False) # Total people who left that month
+
+class DepartmentStats(Base):
+    __tablename__ = "department_stats"
+
+    id = Column(Integer, primary_key=True, index=True)
+    month = Column(Integer, nullable=False)
+    year = Column(Integer, nullable=False)
+    department = Column(String, nullable=False, index=True)
+    
+    total_exits = Column(Integer, default=0)
+    
+    # Ensure unique constraint for updates
+    __table_args__ = (UniqueConstraint('month', 'year', 'department', name='_dept_month_uc'),)
+
+class CategoryStats(Base):
+    __tablename__ = "category_stats"
+
+    id = Column(Integer, primary_key=True, index=True)
+    month = Column(Integer, nullable=False)
+    year = Column(Integer, nullable=False)
+    department = Column(String, nullable=False, index=True)
+    
+    reason_name = Column(String, nullable=False) 
+    count = Column(Integer, default=0)
+    percentage = Column(Float, default=0.0) 
+    
+    __table_args__ = (UniqueConstraint('month', 'year', 'department', 'reason_name', name='_cat_dept_month_uc'),)
+
+class CategoryDetailedReason(Base):
+    __tablename__ = "category_detailed_reasons"
+
+    id = Column(Integer, primary_key=True, index=True)
+    
+    month = Column(Integer, nullable=False, index=True)
+    year = Column(Integer, nullable=False, index=True)
+    department = Column(String, nullable=False, index=True)
+    
+    category_name = Column(String, nullable=False, index=True)
+    
+    # The extracted text from Question 16
+    employee_answer = Column(Text, nullable=False)

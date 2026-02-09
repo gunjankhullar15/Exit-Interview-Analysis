@@ -31,3 +31,4 @@ htmlcov/
 *.csv
 *.docx
 !src/docx_processing/Employee Exit Interview Feedback Form.docx
+alembic.ini

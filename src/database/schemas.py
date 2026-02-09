@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Union
+from datetime import datetime
 
 
 class ReportsInput(BaseModel):
@@ -36,3 +37,24 @@ class GetReportOutput(BaseModel):
 
     class Config:
         from_attributes = True
+
+class Parameters(BaseModel):
+    month: Union[str, int]  # Can be "all" or an integer like 1, 2
+    department: str         # Can be "all" or "IT", "HR", etc.
+    year: int
+
+class ReasonAnalysisItem(BaseModel):
+    category_name: str
+    count: int
+    percentage: float
+    detailed_reasons: List[str]  # List of strings for the frontend
+
+class DepartmentAnalysisItem(BaseModel):
+    department: str
+    exit_count: int
+
+class AnalysisResponse(BaseModel):
+    parameters: Parameters
+    reason_analysis: List[ReasonAnalysisItem]
+    department_analysis: List[DepartmentAnalysisItem]
+
