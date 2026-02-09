@@ -8,9 +8,6 @@ class Employee(Base):
     id = Column(Integer, primary_key=True, index=True)
     employee_code = Column(String, unique=True, index=True, nullable=False)
     name = Column(String, nullable=False)
-    # department = Column(String, nullable=True)
-    # designation = Column(String, nullable=True)
-    
     l1_manager = Column(String, nullable=True)
     l1_manager_code = Column(String, nullable=True)
     l2_manager = Column(String, nullable=True)
@@ -26,7 +23,7 @@ class Employee(Base):
     overall_sentiment = Column(String, nullable=True)
     created_at = Column(DateTime, default=func.now())
     department = Column(String, index=True, nullable=True)
-    sub_department = Column(String, nullable=True)  # <--- NEW COLUMN
+    sub_department = Column(String, nullable=True)  
     designation = Column(String, nullable=True)
 
     # Relationships
