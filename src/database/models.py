@@ -20,11 +20,14 @@ class Employee(Base):
     location = Column(String, nullable=True)
     joining_date = Column(String, nullable=True)
     exit_date = Column(String, nullable=True)
-    #date_of_resignation = Column(String, nullable=True)
+    date_of_resignation = Column(String, nullable=True)
     survey_initiated_date = Column(String, nullable=True)
     survey_submission_date = Column(String, nullable=True)
     overall_sentiment = Column(String, nullable=True)
     created_at = Column(DateTime, default=func.now())
+    department = Column(String, index=True, nullable=True)
+    sub_department = Column(String, nullable=True)  # <--- NEW COLUMN
+    designation = Column(String, nullable=True)
 
     # Relationships
     survey_response = relationship("SurveyResponse", back_populates="employee", uselist=False)
