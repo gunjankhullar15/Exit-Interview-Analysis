@@ -53,6 +53,8 @@ async def upload_excel(file: UploadFile = File(...), db: AsyncSession = Depends(
         # 3. Extract Metadata & Questions (Existing logic with additions)
         # Run in threadpool as docx processing is CPU bound
         processed_data = await run_in_threadpool(extracting_questions_and_adding_answer, df)
+
+        print(processed_data)  # Debug: Check the processed data
         
         count = 0
         
@@ -88,13 +90,13 @@ async def upload_excel(file: UploadFile = File(...), db: AsyncSession = Depends(
                 location=meta['location'],
                 joining_date=meta['joining_date'],
                 exit_date=meta['exit_date'],
-                date_of_resignation=meta['exit_date'], # Using Exit Date as fallback for resignation date
+                date_of_resignation=meta['date_of_resignation'], # Using Exit Date as fallback for resignation date
                 survey_initiated_date=meta['survey_initiated_date'], 
                 survey_submission_date=meta['survey_submission_date'], 
                 
                 # Defaults
-                department="BYT", 
-                designation="AIML Engineer"
+                department=meta['department'], 
+                designation=meta['designation']
             )
             db.add(new_emp)
             await db.flush() 

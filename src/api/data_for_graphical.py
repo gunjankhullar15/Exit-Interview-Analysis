@@ -44,7 +44,8 @@ async def get_graphical_report_data(
             continue
 
         try:
-            emp_resignation_dt = datetime.strptime(emp.date_of_resignation, "%d %b %Y")
+            # yha pai exit_date ki jhage data_of_resignation change hogi
+            emp_resignation_dt = datetime.strptime(emp.exit_date, "%d %b %Y")
         except ValueError:
             continue
 

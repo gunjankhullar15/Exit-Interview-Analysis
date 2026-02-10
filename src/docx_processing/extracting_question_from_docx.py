@@ -132,7 +132,7 @@ def extracting_questions_and_adding_answer(df):
 
         # 2. Extract Metadata (Including Survey Initiated Date)
         metadata_dict = {
-            "employee_code": clean_val(df.loc[0, "Employee NTCode"]),
+            "employee_code": clean_val(df.loc[0, "Employee Code"]),
             "name": clean_val(df.loc[0, "Employee Name"]),
             
             "l1_manager": clean_val(df.loc[0, "L1 Manager"]),
@@ -148,6 +148,10 @@ def extracting_questions_and_adding_answer(df):
             
             "joining_date": clean_val(df.loc[0, "Joining Date"]),
             "exit_date": clean_val(df.loc[0, "Exit Date"]),
+            "date_of_resignation": clean_val(df.loc[0, "Date of Resignation"]),
+
+            "department": clean_val(df.loc[0, "Department"]),
+            "designation": clean_val(df.loc[0, "Designation"]),
             
             # --- Handling the Empty "Survey Initiated Date" ---
             # If the column exists, it will extract; clean_val will turn NaN to None
