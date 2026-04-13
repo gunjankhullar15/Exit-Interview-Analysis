@@ -1,15 +1,17 @@
-from langchain_groq import ChatGroq
+#from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 import json
 from src.config.pydantic_config import settings
 
-model = ChatGroq(
-        
-        api_key=settings.GROQ_API_KEY,
-        model_name="llama-3.3-70b-versatile" ,
-        response_format={"type": "json_object"},
-    )
+model = ChatOpenAI(
+    api_key=settings.OPENAI_API_KEY,
+    model="gpt-4o-mini",
+    temperature=0,
+    model_kwargs={"response_format": {"type": "json_object"}},
+    max_retries=3 
+)
 
-def getting_analysis_from_llm(data):
+async def getting_analysis_from_llm(data):
 
     prompt = f"""
 You are an expert HR analyst specializing in evaluating employee exit and feedback forms.
@@ -67,10 +69,34 @@ Use concise bullet points.
 
 ---
 
+# >>> ADDED / UPDATED: CONCEPTUAL CATEGORY DEFINITIONS <<<
+CATEGORY DEFINITIONS & CONCEPTUAL BOUNDARIES:
+You must strictly evaluate the core intent of the employee's feedback using these boundaries:
+
+- career change: The employee is leaving the current industry/profession entirely or returning to full-time education. 
+- personal reasons: The driver for leaving originates COMPLETELY OUTSIDE the workplace (e.g., family circumstances, personal health, relocation). If the feedback mentions ANY individual, behavior, or policy inside the company, it CANNOT be a personal reason.
+- better work-life balance: The employee's primary focus is on their schedule, time, or location (e.g., seeking remote work, escaping shift timings, reducing commute, or recovering from burnout).
+- role redundancy: The company explicitly eliminated the position or laid off the employee.
+- dissatisfaction with management: The employee is unhappy with operational or structural leadership. This includes being assigned out-of-scope work, lack of role clarity, poor company policies, or micromanagement. 
+- seeking higher salary: The employee's primary focus is base compensation, pay, or financial benefits.
+- lack of growth opportunities: The employee is seeking career advancement or skill development that the company cannot provide (e.g., seeking upward mobility, promotions, or better technical projects).
+- toxic work environment: The employee is experiencing negative interpersonal dynamics. This includes unfair favoritism, discrimination, hostility, harassment, or unprofessional peer/leadership behavior.
+# >>> END ADDED INSTRUCTIONS <<<
+
+---
+
 Leaving Reason Classification & Analytics:
-Identify the primary reason for leaving from the list below. 
+Identify the primary reason for leaving from the list below based strictly on the definitions above. 
 1. In the "leaving_reason" object, assign value 1 to the most relevant reason and 0 to all others.
-2. In the "exit_analysis" object, provide the string name of the category and its controllability.
+2. In the "exit_analysis" object, provide the string name of the category, its controllability, and a "supporting_quote".
+
+3. The "supporting_quote" MUST be a pure COPY-PASTE extraction from the provided `{data}`. 
+   - RULE 1: Find the exact text the employee wrote that justifies your category and extract the COMPLETE SENTENCE containing that thought.
+   - RULE 2: DO NOT extract mid-sentence fragments. The quote must start with a capital letter and end with a period or proper punctuation.
+   - RULE 3: DO NOT rephrase, paraphrase, or fix the employee's grammar. If the employee wrote a grammatically incorrect full sentence, copy it exactly.
+   - RULE 4: If no specific text justifies the reason, return an empty string "".
+
+CRITICAL INSTRUCTION: You MUST ONLY use one of the exact reasons from the list below. Do not invent new categories. 
 
 REQUIRED REASONS:
 - career change (Controllable: false)
@@ -142,21 +168,22 @@ Return only valid JSON exactly in the structure below.
       "career change": 0,
       "personal reasons": 0,
       "better work-life balance": 0,
-      "health reasons": 0,
-      "dissatisfaction with management": 1,
+      "role redundancy": 0,
+      "dissatisfaction with management": 0,
       "seeking higher salary": 0,
       "lack of growth opportunities": 0,
       "toxic work environment": 0
     }},
     "exit_analysis": {{
-        "primary_reason_category": "Management & Leadership",
-        "is_controllable": true
+        "primary_reason_category": "[INSERT SELECTED CATEGORY HERE]",
+        "is_controllable": true,
+        "supporting_quote": "[COPY EXACT TEXT FROM DATA OR LEAVE BLANK]"
     }}
   }}
 }}
 """
     
-    response = model.invoke(prompt)
+    response = await model.ainvoke(prompt)
 
     final_json_data = json.loads(response.content)
 

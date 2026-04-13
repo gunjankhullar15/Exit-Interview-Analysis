@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     database_username: str
     
     # LLM Settings
-    GROQ_API_KEY: str
+    OPENAI_API_KEY: str
 
     class Config:
         env_file = '.env'

@@ -65,43 +65,43 @@ class AnalysisReport(Base):
 #     total_count = Column(Integer, nullable=False) # Number of people for this reason
 #     total_month_exits = Column(Integer, nullable=False) # Total people who left that month
 
-class DepartmentStats(Base):
-    __tablename__ = "department_stats"
+# class DepartmentStats(Base):
+#     __tablename__ = "department_stats"
 
-    id = Column(Integer, primary_key=True, index=True)
-    month = Column(Integer, nullable=False)
-    year = Column(Integer, nullable=False)
-    department = Column(String, nullable=False, index=True)
+#     id = Column(Integer, primary_key=True, index=True)
+#     month = Column(Integer, nullable=False)
+#     year = Column(Integer, nullable=False)
+#     department = Column(String, nullable=False, index=True)
     
-    total_exits = Column(Integer, default=0)
+#     total_exits = Column(Integer, default=0)
     
-    # Ensure unique constraint for updates
-    __table_args__ = (UniqueConstraint('month', 'year', 'department', name='_dept_month_uc'),)
+#     # Ensure unique constraint for updates
+#     __table_args__ = (UniqueConstraint('month', 'year', 'department', name='_dept_month_uc'),)
 
-class CategoryStats(Base):
-    __tablename__ = "category_stats"
+# class CategoryStats(Base):
+#     __tablename__ = "category_stats"
 
-    id = Column(Integer, primary_key=True, index=True)
-    month = Column(Integer, nullable=False)
-    year = Column(Integer, nullable=False)
-    department = Column(String, nullable=False, index=True)
+#     id = Column(Integer, primary_key=True, index=True)
+#     month = Column(Integer, nullable=False)
+#     year = Column(Integer, nullable=False)
+#     department = Column(String, nullable=False, index=True)
     
-    reason_name = Column(String, nullable=False) 
-    count = Column(Integer, default=0)
-    percentage = Column(Float, default=0.0) 
+#     reason_name = Column(String, nullable=False) 
+#     count = Column(Integer, default=0)
+#     percentage = Column(Float, default=0.0) 
     
-    __table_args__ = (UniqueConstraint('month', 'year', 'department', 'reason_name', name='_cat_dept_month_uc'),)
+#     __table_args__ = (UniqueConstraint('month', 'year', 'department', 'reason_name', name='_cat_dept_month_uc'),)
 
-class CategoryDetailedReason(Base):
-    __tablename__ = "category_detailed_reasons"
+# class CategoryDetailedReason(Base):
+#     __tablename__ = "category_detailed_reasons"
 
-    id = Column(Integer, primary_key=True, index=True)
+#     id = Column(Integer, primary_key=True, index=True)
     
-    month = Column(Integer, nullable=False, index=True)
-    year = Column(Integer, nullable=False, index=True)
-    department = Column(String, nullable=False, index=True)
+#     month = Column(Integer, nullable=False, index=True)
+#     year = Column(Integer, nullable=False, index=True)
+#     department = Column(String, nullable=False, index=True)
     
-    category_name = Column(String, nullable=False, index=True)
+#     category_name = Column(String, nullable=False, index=True)
     
-    # The extracted text from Question 16
-    employee_answer = Column(Text, nullable=False)
+#     # The extracted text from Question 16
+#     employee_answer = Column(Text, nullable=False)

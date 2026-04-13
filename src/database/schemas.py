@@ -2,28 +2,22 @@ from pydantic import BaseModel
 from typing import Optional, Dict, Any, List, Union
 from datetime import datetime
 
-
 class ReportsInput(BaseModel):
     pass
 
 class ReportsOutput(BaseModel):
-    
+    # --- ORDERED EXACTLY AS PER FIGMA UI TABLE ---
     employee_code: str
     name: str
-    l1_manager: Optional[str] = "N/A"
-    l1_manager_code: Optional[str] = "N/A"
-    l2_manager: Optional[str] = "N/A"
-    l2_manager_code: Optional[str] = "N/A"
-    hrbp_name: Optional[str] = "N/A"
-    hrbp_code: Optional[str] = "N/A"
-    location: Optional[str] = "N/A"
-    joining_date: Optional[str] = "N/A"
+    department: Optional[str] = "N/A"
+    designation: Optional[str] = "N/A"
+    date_of_resignation: Optional[str] = "N/A"
     exit_date: Optional[str] = "N/A"
-    survey_initiated_date: Optional[str] = "N/A"
-    survey_submission_date: Optional[str] = "N/A"
-    
-    # This comes from the Employee table
-    overall_sentiment: Optional[str] = "N/A"
+    l1_manager: Optional[str] = "N/A"
+    l2_manager: Optional[str] = "N/A"          # Replaces the duplicate "L1 Manager" in UI
+    hrbp_name: Optional[str] = "N/A"           # Mapped to "HRBP" in UI
+    overall_sentiment: Optional[str] = "N/A"   # The 1st "Overall Sentiments" in UI
+    exit_reason: Optional[str] = "N/A"         # Replaces the 2nd "Overall Sentiments" in UI
 
     class Config:
         from_attributes = True
@@ -39,15 +33,15 @@ class GetReportOutput(BaseModel):
         from_attributes = True
 
 class Parameters(BaseModel):
-    month: Union[str, int]  # Can be "all" or an integer like 1, 2
-    department: str         # Can be "all" or "IT", "HR", etc.
+    month: Union[str, int]  
+    department: str         
     year: int
 
 class ReasonAnalysisItem(BaseModel):
     category_name: str
     count: int
     percentage: float
-    detailed_reasons: List[str]  # List of strings for the frontend
+    detailed_reasons: List[str]  
 
 class DepartmentAnalysisItem(BaseModel):
     department: str
@@ -57,4 +51,3 @@ class AnalysisResponse(BaseModel):
     parameters: Parameters
     reason_analysis: List[ReasonAnalysisItem]
     department_analysis: List[DepartmentAnalysisItem]
-
