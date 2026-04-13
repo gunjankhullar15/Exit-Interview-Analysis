@@ -1,0 +1,61 @@
+<div class="reasons-container">
+  <app-navbar></app-navbar>
+
+  <div class="main-content">
+
+    <div class="page-header">
+      <button mat-icon-button (click)="goBack()" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <h1 class="page-title">EXIT ANALYSIS</h1>
+        <!-- <p class="page-subtitle">{{ pageTitle }}</p> -->
+      </div>
+    </div>
+
+    <!-- Cards grid — one card per reason group -->
+    <div class="cards-grid" *ngIf="reasonCards.length; else empty">
+      <div class="reason-card" *ngFor="let card of reasonCards">
+
+        <!-- Card header: badge + title + employee count -->
+        <div class="card-header">
+          <span class="count-badge" [style.background]="card.color">{{ card.count }}</span>
+          <div class="card-title-block">
+            <span class="card-title">{{ card.groupLabel }}</span>
+            <span class="card-employees">{{ card.count }} {{ card.count === 1 ? 'Employee' : 'Employees' }}</span>
+          </div>
+        </div>
+
+        <!-- Individual raw reasons with their feedbacks -->
+        <div class="reasons-list">
+          <div class="reason-item" *ngFor="let r of card.reasons">
+
+            <div class="reason-row">
+              <span class="reason-label">{{ r.label }}</span>
+              <span class="reason-count" [style.background]="card.color">{{ r.count }}</span>
+            </div>
+
+            <!-- Feedback texts from feedback_by_reason -->
+            <ul class="feedback-list" *ngIf="r.feedbacks.length">
+              <li *ngFor="let fb of r.feedbacks" class="feedback-item">{{ fb }}</li>
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <div class="empty-state">
+        <mat-icon>bar_chart</mat-icon>
+        <p>No exit reason data available for the selected period.</p>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <div class="footer">
+    <p>Powered by BYT strategy group</p>
+  </div>
+</div>

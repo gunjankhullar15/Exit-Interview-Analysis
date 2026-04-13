@@ -1,0 +1,79 @@
+<div class="upload-dialog-container">
+  <h2 mat-dialog-title class="dialog-title">
+    <mat-icon>upload_file</mat-icon>
+    Drag & Drop or Upload a file
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="upload-area" 
+         (click)="onUploadClick()"
+         (dragover)="onDragOver($event)" 
+         (dragleave)="onDragLeave($event)" 
+         (drop)="onDrop($event)"
+         [class.drag-over]="isDragOver">
+     
+      <div class="upload-icon-wrapper">
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+      </div>
+      
+      <p class="upload-text">Drag & Drop or Upload a file</p>
+      <p class="file-format-text">(Supported formats: XLS, XLSX, CSV)</p>
+      
+      @if (selectedFile) {
+        <p class="file-info">
+          <mat-icon class="file-check-icon">check_circle</mat-icon>
+          {{ selectedFile.name }}
+          <!-- @if (isUploaded) {
+            <span class="status-badge success">✓ Uploaded</span>
+          }
+          @if (isUploading) {
+            <span class="status-badge loading">⟳ Uploading...</span>
+          } -->
+        </p>
+      }
+      
+      <input type="file" 
+             id="fileInput"
+             (change)="onFileSelected($event)" 
+             style="display: none"
+             accept=".xlsx,.xls,.csv">
+    </div>
+
+  
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <!-- Discard button -->
+    <button mat-stroked-button 
+            (click)="onDiscard()"
+            class="discard-btn"
+            [disabled]="isUploading || isGenerating">
+      Discard
+    </button>
+    
+    <!-- Upload button -->
+    <button mat-stroked-button 
+            (click)="onUploadFile()"
+            class="upload-btn"
+            [disabled]="!selectedFile || isUploading || isUploaded || isGenerating">
+      @if (isUploading) {
+        <span>⟳ Uploading...</span>
+      } @else {
+        <span>Upload</span>
+      }
+    </button>
+    
+    <!-- Generate button -->
+    <button mat-raised-button 
+            (click)="onGenerateAnalysis()"
+            [disabled]="!isUploaded || isGenerating || isUploading"
+            class="generate-btn"
+            [class.active]="isUploaded && !isGenerating && !isUploading">
+      @if (isGenerating) {
+        <span>⟳ Generating...</span>
+      } @else {
+        <span>Generate Exit Analysis</span>
+      }
+    </button>
+  </mat-dialog-actions>
+</div>

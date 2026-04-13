@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+$font   : 'Roboto', sans-serif;
+$bg     : #f0f2f5;
+$white  : #ffffff;
+$dark   : #1f2937;
+$mid    : #6b7280;
+$light  : #9ca3af;
+$border : #e5e7eb;
+$shadow : 0 2px 16px rgba(0,0,0,0.07);
+$r-lg   : 12px;
+$r-md   : 8px;
+$r-sm   : 6px;
+
+.reasons-container {
+  width: 100%;
+  min-height: 100vh;
+  background: $bg;
+  font-family: $font;
+  box-sizing: border-box;
+}
+
+.main-content {
+  max-width: 1360px;
+  margin: 20px auto 0;
+  padding: 24px 32px 32px;
+  background: $white;
+  border-radius: $r-lg;
+  box-shadow: $shadow;
+  box-sizing: border-box;
+
+  @media (max-width: 1400px) { margin-left: 20px; margin-right: 20px; }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.back-btn {
+  color: #2c2c2c;
+  flex-shrink: 0;
+  &:hover { background: rgba(0,0,0,0.05); }
+}
+
+.header-text { display: flex; flex-direction: column; gap: 2px; }
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: $dark;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: $mid;
+  margin: 0;
+}
+
+// ── 2×2 grid ─────────────────────────────────────────────────────────────────
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.reason-card {
+  background: #f3f4f6;;
+  border: 1px solid $border;
+  border-radius: $r-md;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: box-shadow 0.2s ease;
+
+  &:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+}
+
+// ── Card header ───────────────────────────────────────────────────────────────
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.count-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: $r-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.card-title-block { display: flex; flex-direction: column; gap: 2px; }
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: $dark;
+}
+
+.card-employees {
+  font-size: 12px;
+  color: $mid;
+}
+
+// ── Individual reason rows ────────────────────────────────────────────────────
+.reasons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reason-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reason-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.reason-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: $dark;
+}
+
+.reason-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+// ── Feedback list ─────────────────────────────────────────────────────────────
+.feedback-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.feedback-item {
+  font-size: 13px;
+  line-height: 1.6;
+  color: $mid;
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 32px;
+  color: $light;
+  gap: 10px;
+  text-align: center;
+
+  mat-icon { font-size: 42px; width: 42px; height: 42px; opacity: 0.3; }
+  p { margin: 0; font-size: 14px; }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+.footer {
+  display: flex;
+  justify-content: center;
+  color: $mid;
+  font-size: 13px;
+  padding: 16px 12px 24px;
+  p { margin: 0; }
+}

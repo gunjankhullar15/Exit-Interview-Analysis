@@ -1,0 +1,152 @@
+<div class="report-container">
+  <app-navbar></app-navbar>
+
+  <div class="main-content">
+
+    <div class="page-header">
+      <div class="header-left">
+        <button mat-icon-button (click)="goBack()" class="back-btn">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="page-title">EXIT ANALYSIS</h1>
+      </div>
+
+      <div class="filters">
+
+        <mat-form-field appearance="outline" class="filter-field date-filter">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDateObj"
+            (dateChange)="onStartDatePicked($event.value)" />
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field date-filter">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDateObj"
+            (dateChange)="onEndDatePicked($event.value)" />
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field dept-filter">
+          <mat-label>Department</mat-label>
+          <mat-select [(ngModel)]="selectedDepartment" (selectionChange)="onDeptChange()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="44"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && reportData" class="charts-container">
+
+      <!-- Left: Donut -->
+      <div class="chart-card left-card">
+        <div class="card-head">
+          <span class="card-title">DISTRIBUTION OVERVIEW</span>
+          <span class="card-sub">Exit Reasons Breakdown By Percentage</span>
+        </div>
+        <div class="donut-area">
+          <div class="chart-wrapper">
+            <canvas baseChart
+              [data]="doughnutChartData"
+              [type]="doughnutChartType"
+              [options]="doughnutChartOptions">
+            </canvas>
+          </div>
+          <div class="legend-grid">
+            <div class="legend-item" *ngFor="let item of getLegendItems()">
+              <span class="legend-dot" [style.background]="item.color"></span>
+              <span class="legend-text">{{ item.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Bars -->
+      <div class="chart-card right-card">
+
+        <div class="right-header">
+          <div class="right-title-block">
+            <span class="card-title">DETAILED BREAKDOWN</span>
+            <a class="view-link" (click)="viewAllReasons()">View all exit details and reasons ›</a>
+          </div>
+          <div class="exits-badge">
+            Total exits: &nbsp;<strong>{{ reportData.summary.total_exits }}</strong>
+          </div>
+        </div>
+
+        <!-- Department view -->
+        <ng-container *ngIf="!selectedDepartment; else reasonView">
+          <p class="section-label">EXITS BY DEPARTMENT</p>
+          <div class="bar-list">
+            <div class="bar-row" *ngFor="let item of departmentBreakdown">
+
+              <!-- Col 1: label -->
+              <span class="bar-label">{{ item.label }}</span>
+
+              <!-- Col 2: track -->
+              <div class="bar-track">
+                <div class="bar-fill"
+                  [style.width.%]="item.percentage"
+                  [style.background]="item.color">
+                </div>
+              </div>
+
+              <!-- Col 3: percent — inline style so encapsulation cannot hide it -->
+              <span style="font-size:13px;font-weight:700;color:#1f2937;text-align:right;white-space:nowrap;">
+                {{ item.percentage }}%
+              </span>
+
+              <!-- Col 4: pill -->
+              <span class="count-pill" [style.background]="item.color">{{ item.count }}</span>
+
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Reason view -->
+        <ng-template #reasonView>
+          <p class="section-label">EXITS BY REASON — {{ selectedDepartment }}</p>
+          <div class="bar-list">
+            <div class="bar-row" *ngFor="let item of reasonBreakdown">
+
+              <span class="bar-label">{{ item.label }}</span>
+
+              <div class="bar-track">
+                <div class="bar-fill"
+                  [style.width.%]="item.percentage"
+                  [style.background]="item.color">
+                </div>
+              </div>
+
+              <span style="font-size:13px;font-weight:700;color:#1f2937;text-align:right;white-space:nowrap;">
+                {{ item.percentage }}%
+              </span>
+
+              <span class="count-pill" [style.background]="item.color">{{ item.count }}</span>
+
+            </div>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && !reportData" class="empty-state">
+      <mat-icon>bar_chart</mat-icon>
+      <p>No data available. Adjust your filters and try again.</p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>Powered by BYT strategy group</p>
+  </div>
+</div>

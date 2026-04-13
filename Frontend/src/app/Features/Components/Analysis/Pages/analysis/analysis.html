@@ -1,0 +1,141 @@
+<div class="dashboard-container">
+  <app-navbar></app-navbar>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading analysis report...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" *ngIf="!isLoading">
+    <!-- Back Button and Title -->
+    <div class="header-section">
+      <button class="back-btn" (click)="onBack()">
+          <mat-icon>arrow_back</mat-icon> FEEDBACK FORM ANALYSIS
+      </button>
+    </div>
+
+    <!-- Employee Details -->
+    <div class="section employee-details">
+      <h3 class="section-title">EMPLOYEE DETAILS</h3>
+      <div class="details-grid">
+        <div class="detail-row">
+          <span class="label">Employee Name:</span>
+          <span class="value">{{ employeeData.name || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">HRBP:</span>
+          <span class="value">{{ employeeData.hrbp || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Designation:</span>
+          <span class="value">{{ employeeData.designation || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Employee Code:</span>
+          <span class="value">{{ employeeData.code || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">L1 Manager:</span>
+          <span class="value">{{ employeeData.l1Manager || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Date of Exit:</span>
+          <span class="value">{{ employeeData.exitDate || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Department:</span>
+          <span class="value">{{ employeeData.department || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">L2 Manager:</span>
+          <span class="value">{{ employeeData.l2Manager || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Date of Resignation:</span>
+          <span class="value">{{ employeeData.resignationDate || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MCQ Analysis -->
+    <div class="section mcq-section">
+      <h3 class="section-title">OVERALL ANALYSIS</h3>
+      <div class="mcq-grid">
+        <div class="mcq-box">
+          <div class="mcq-label">Total Questions</div>
+          <div class="mcq-value">{{ mcqData.selectedAnswer || '0' }}</div>
+        </div>
+        <div class="mcq-box">
+          <div class="mcq-label">Positive Percentage</div>
+          <div class="mcq-value">{{ mcqData.calculatedRating || '0/100' }}</div>
+        </div>
+        <div class="mcq-box">
+          <div class="mcq-label">Negative Percentage</div>
+          <div class="mcq-value">{{ mcqData.sentimentScore || '0/100' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subjective Analysis -->
+    <div class="section subjective-section">
+      <h3 class="section-title">SUBJECTIVE ANALYSIS</h3>
+      
+      <div class="remark-block">
+        <div class="remark-label">Positive remarks</div>
+        <div class="remark-text remarks-list">
+          <ng-container *ngIf="subjectiveData.positiveRemarks !== 'No remarks available'; else noPositive">
+            <div *ngFor="let remark of subjectiveData.positiveRemarks.split('\n')" class="remark-item">
+              • {{ remark }}
+            </div>
+          </ng-container>
+          <ng-template #noPositive>
+            <div class="no-remarks">No remarks available</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="remark-block">
+        <div class="remark-label">Negative remarks</div>
+        <div class="remark-text remarks-list">
+          <ng-container *ngIf="subjectiveData.negativeRemarks !== 'No remarks available'; else noNegative">
+            <div *ngFor="let remark of subjectiveData.negativeRemarks.split('\n')" class="remark-item">
+              • {{ remark }}
+            </div>
+          </ng-container>
+          <ng-template #noNegative>
+            <div class="no-remarks">No remarks available</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="remark-block">
+        <div class="remark-label">Neutral remarks</div>
+        <div class="remark-text remarks-list">
+          <ng-container *ngIf="subjectiveData.otherIdeal !== 'No remarks available'; else noNeutral">
+            <div *ngFor="let remark of subjectiveData.otherIdeal.split('\n')" class="remark-item">
+              • {{ remark }}
+            </div>
+          </ng-container>
+          <ng-template #noNeutral>
+            <div class="no-remarks">No remarks available</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overall Summary -->
+    <div class="section summary-section">
+      <h3 class="section-title">OVERALL SUMMARY</h3>
+      <div class="summary-text" style="white-space: pre-line;">
+        {{ summaryData.content }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer dashboard-footer">
+    <p>Powered by BYT strategy group</p>
+  </div>
+</div>
